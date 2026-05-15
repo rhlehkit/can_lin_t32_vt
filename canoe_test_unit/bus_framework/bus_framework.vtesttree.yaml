@@ -1,0 +1,57 @@
+version: 2.4.0
+
+test-tree:
+  - group: Simple Examples
+    elements:
+      - python-test-case: TC_PYTHON_RuntimeInfo
+        title: Python Runtime Info
+      - python-test-case: TC_EXAMPLE_CAN_SendAndExpectResponse
+        title: Example CAN Send and Expect Response
+      - python-test-case: TC_EXAMPLE_LIN_RequestAndExpectResponse
+        title: Example LIN Request and Expect Response
+      - python-test-case: TC_EXAMPLE_CAN_PeriodicWhileCheckingResponse
+        title: Example CAN Periodic TX While Checking RX
+  - group: TRACE32 Debug Snapshots
+    elements:
+      - python-test-case: TC_TRACE32_ConnectAndSnapshot
+        title: TRACE32 Connect and Snapshot
+      - python-test-case: TC_TRACE32_AssertVariables
+        title: TRACE32 Assert Variables
+      - python-test-case: TC_TRACE32_WriteVariables
+        title: TRACE32 Write Variables
+      - python-test-case: TC_CAN_TxThenTrace32Snapshot
+        title: CAN TX then TRACE32 Snapshot
+      - python-test-case: TC_CAN_RxThenTrace32Snapshot
+        title: CAN RX then TRACE32 Snapshot
+      - python-test-case: TC_TRACE32_WriteThenCanTx
+        title: TRACE32 Write then CAN TX
+      - python-test-case: TC_LIN_RxThenTrace32Snapshot
+        title: LIN RX then TRACE32 Snapshot
+  - group: CAN Tests
+    elements:
+      - python-test-case: TC_CAN_TxOnce
+        title: CAN TX Once
+      - python-test-case: TC_CAN_RxExpect
+        title: CAN RX Expected Frame
+      - python-test-case: TC_CAN_PeriodicTx
+        title: CAN Periodic TX for Duration
+      - python-test-case: TC_CAN_PeriodicTx_Start
+        title: CAN Periodic TX Start
+      - python-test-case: TC_CAN_PeriodicTx_Stop
+        title: CAN Periodic TX Stop
+      - python-test-case: TC_CAN_PeriodCheck
+        title: CAN RX Period Check
+  - group: LIN Tests
+    elements:
+      - python-test-case: TC_LIN_TxOnce
+        title: LIN TX Once
+      - python-test-case: TC_LIN_RxExpect
+        title: LIN RX Expected Frame
+      - python-test-case: TC_LIN_PeriodicTx
+        title: LIN Periodic Header/Data TX for Duration
+      - python-test-case: TC_LIN_PeriodicTx_Start
+        title: LIN Periodic Header/Data TX Start
+      - python-test-case: TC_LIN_PeriodicTx_Stop
+        title: LIN Periodic Header/Data TX Stop
+      - python-test-case: TC_LIN_PeriodCheck
+        title: LIN RX Period Check

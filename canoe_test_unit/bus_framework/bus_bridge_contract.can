@@ -1,0 +1,292 @@
+/*@!Encoding:1252*/
+
+/*
+ * Bus bridge contract for bus_test_cases.py.
+ *
+ * This file is intentionally conservative: it defines the exported functions
+ * that Python calls, but returns BUS_BRIDGE_NOT_IMPLEMENTED until you connect
+ * the functions to your CANoe CAN/LIN configuration.
+ *
+ * Recommended implementation:
+ * - CAN TX/RX and CAN period measurement: implement in CAPL using CANoe
+ *   message objects, on message handlers, timers, or Test Feature Set helpers.
+ * - LIN TX/RX and LIN period measurement: implement in CAPL using LDF named
+ *   frame objects, LIN schedule/header control, on linFrame handlers, and a
+ *   small internal queue.
+ */
+
+variables
+{
+  const long BUS_BRIDGE_OK = 0;
+  const long BUS_BRIDGE_NOT_IMPLEMENTED = 9001;
+
+  long gLastError = 0;
+
+  long gLastRxId = 0;
+  long gLastRxExtended = 0;
+  long gLastRxDlc = 0;
+  long gLastRxData0 = 0;
+  long gLastRxData1 = 0;
+  long gLastRxData2 = 0;
+  long gLastRxData3 = 0;
+  long gLastRxData4 = 0;
+  long gLastRxData5 = 0;
+  long gLastRxData6 = 0;
+  long gLastRxData7 = 0;
+
+  long gPeriodSampleCount = 0;
+  long gPeriodAverageUs = 0;
+  long gPeriodMinimumUs = 0;
+  long gPeriodMaximumUs = 0;
+}
+
+long BusBridge_SetError(long errorCode)
+{
+  gLastError = errorCode;
+  return errorCode;
+}
+
+export long BusBridge_Reset()
+{
+  gLastError = 0;
+
+  gLastRxId = 0;
+  gLastRxExtended = 0;
+  gLastRxDlc = 0;
+  gLastRxData0 = 0;
+  gLastRxData1 = 0;
+  gLastRxData2 = 0;
+  gLastRxData3 = 0;
+  gLastRxData4 = 0;
+  gLastRxData5 = 0;
+  gLastRxData6 = 0;
+  gLastRxData7 = 0;
+
+  gPeriodSampleCount = 0;
+  gPeriodAverageUs = 0;
+  gPeriodMinimumUs = 0;
+  gPeriodMaximumUs = 0;
+  return BUS_BRIDGE_OK;
+}
+
+export long BusBridge_SendCan(
+  long channel,
+  long canId,
+  long isExtended,
+  long dlc,
+  long b0,
+  long b1,
+  long b2,
+  long b3,
+  long b4,
+  long b5,
+  long b6,
+  long b7)
+{
+  /*
+   * TODO:
+   * - Create/fill a CAN message object.
+   * - Set channel, ID, extended flag, DLC, and bytes.
+   * - Call output(message).
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_WaitCan(long channel, long canId, long isExtended, long timeoutMs)
+{
+  /*
+   * TODO:
+   * - Wait until a matching received CAN message arrives or timeout expires.
+   * - Fill gLastRxId/gLastRxExtended/gLastRxDlc/gLastRxData0..7.
+   * - Return BUS_BRIDGE_OK on match.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_StartCanPeriodic(
+  long taskId,
+  long channel,
+  long canId,
+  long isExtended,
+  long periodMs,
+  long dlc,
+  long b0,
+  long b1,
+  long b2,
+  long b3,
+  long b4,
+  long b5,
+  long b6,
+  long b7)
+{
+  /*
+   * TODO:
+   * - Store task configuration by taskId.
+   * - Start a CAPL timer that outputs the configured CAN message every periodMs.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_CheckCanPeriod(
+  long channel,
+  long canId,
+  long isExtended,
+  long expectedPeriodMs,
+  long toleranceMs,
+  long sampleCount,
+  long timeoutMs)
+{
+  /*
+   * TODO:
+   * - Observe sampleCount intervals of the matching CAN message.
+   * - Fill gPeriodSampleCount/gPeriodAverageUs/gPeriodMinimumUs/gPeriodMaximumUs.
+   * - Return BUS_BRIDGE_OK if each interval is within tolerance.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_SendLin(
+  long channel,
+  long frameId,
+  long dlc,
+  long b0,
+  long b1,
+  long b2,
+  long b3,
+  long b4,
+  long b5,
+  long b6,
+  long b7)
+{
+  /*
+   * TODO:
+   * - For master publish: write response data and transmit/request header.
+   * - For slave simulation: update the response data for frameId.
+   * - Prefer LDF named frame objects if available.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_RequestLinHeader(long channel, long frameId)
+{
+  /*
+   * TODO:
+   * - Transmit/request a LIN header for frameId on channel.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_WaitLin(long channel, long frameId, long timeoutMs)
+{
+  /*
+   * TODO:
+   * - Wait until a matching LIN frame arrives or timeout expires.
+   * - Fill gLastRxId/gLastRxDlc/gLastRxData0..7.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_StartLinPeriodic(
+  long taskId,
+  long channel,
+  long frameId,
+  long sendData,
+  long periodMs,
+  long dlc,
+  long b0,
+  long b1,
+  long b2,
+  long b3,
+  long b4,
+  long b5,
+  long b6,
+  long b7)
+{
+  /*
+   * TODO:
+   * - Store task configuration by taskId.
+   * - Start a CAPL timer that periodically sends either a LIN header or full
+   *   frame/data depending on sendData.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_CheckLinPeriod(
+  long channel,
+  long frameId,
+  long expectedPeriodMs,
+  long toleranceMs,
+  long sampleCount,
+  long timeoutMs)
+{
+  /*
+   * TODO:
+   * - Observe sampleCount intervals of the matching LIN frame.
+   * - Fill gPeriodSampleCount/gPeriodAverageUs/gPeriodMinimumUs/gPeriodMaximumUs.
+   * - Return BUS_BRIDGE_OK if each interval is within tolerance.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_StopPeriodic(long taskId)
+{
+  /*
+   * TODO:
+   * - Stop the CAPL timer associated with taskId.
+   */
+  return BusBridge_SetError(BUS_BRIDGE_NOT_IMPLEMENTED);
+}
+
+export long BusBridge_GetLastRxId()
+{
+  return gLastRxId;
+}
+
+export long BusBridge_GetLastRxExtended()
+{
+  return gLastRxExtended;
+}
+
+export long BusBridge_GetLastRxDlc()
+{
+  return gLastRxDlc;
+}
+
+export long BusBridge_GetLastRxByte(long index)
+{
+  if (index == 0) return gLastRxData0;
+  if (index == 1) return gLastRxData1;
+  if (index == 2) return gLastRxData2;
+  if (index == 3) return gLastRxData3;
+  if (index == 4) return gLastRxData4;
+  if (index == 5) return gLastRxData5;
+  if (index == 6) return gLastRxData6;
+  if (index == 7) return gLastRxData7;
+  return 0;
+}
+
+export long BusBridge_GetPeriodSampleCount()
+{
+  return gPeriodSampleCount;
+}
+
+export long BusBridge_GetPeriodAverageUs()
+{
+  return gPeriodAverageUs;
+}
+
+export long BusBridge_GetPeriodMinimumUs()
+{
+  return gPeriodMinimumUs;
+}
+
+export long BusBridge_GetPeriodMaximumUs()
+{
+  return gPeriodMaximumUs;
+}
+
+export long BusBridge_GetLastError()
+{
+  return gLastError;
+}
+

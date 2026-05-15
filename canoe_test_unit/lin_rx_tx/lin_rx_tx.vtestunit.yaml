@@ -1,0 +1,9 @@
+version: 2.1.0
+
+test-unit-information:
+  description: LIN TX/RX smoke test implemented as a CANoe/vTESTstudio Python Test Unit.
+
+test-unit-implementation:
+  - source-file-path: lin_rx_tx_test.py
+  - source-file-path: lin_rx_tx.vtesttree.yaml
+

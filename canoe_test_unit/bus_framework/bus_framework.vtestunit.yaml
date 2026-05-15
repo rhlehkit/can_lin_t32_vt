@@ -1,0 +1,16 @@
+version: 2.1.0
+
+test-unit-information:
+  description: Reusable CAN/LIN TX, RX, periodic TX, and period-check Python Test Unit for CANoe/vTESTstudio.
+
+test-unit-implementation:
+  - source-file-path: bus_test_cases.py
+  - source-file-path: simple_user_tc.py
+  - source-file-path: runtime_info_tc.py
+  - source-file-path: trace32_test_cases.py
+  - source-file-path: bus_test_lib.py
+  - source-file-path: trace32_client.py
+  - source-file-path: bus_test_config.py
+  - source-file-path: trace32_config.py
+  - source-file-path: bus_bridge_contract.can
+  - source-file-path: bus_framework.vtesttree.yaml

@@ -1,0 +1,6 @@
+version: 2.4.0
+
+test-tree:
+  - python-test-case: LinTxRx_CaplBridgeTest
+    title: LIN TX/RX CAPL Bridge Test
+

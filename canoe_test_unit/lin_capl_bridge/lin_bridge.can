@@ -1,0 +1,152 @@
+/*@!Encoding:1252*/
+
+/*
+ * CAPL bridge contract for lin_capl_bridge_test.py.
+ *
+ * Treat this as a project template. LIN frame object names, channel, LDF frame
+ * names, and receive handlers should be adjusted in the CANoe configuration.
+ *
+ * Exported functions intentionally use long arguments/return values because
+ * that is the most portable shape when Python calls CAPL through CANoe.
+ */
+
+variables
+{
+  const long LIN_CHANNEL = 1;
+
+  linmessage 0x00 gTxFrame;
+  linmessage 0x00 gRxHeader;
+
+  long gLastRxId;
+  long gLastRxDlc;
+  long gLastRxData0;
+  long gLastRxData1;
+  long gLastRxData2;
+  long gLastRxData3;
+  long gLastRxData4;
+  long gLastRxData5;
+  long gLastRxData6;
+  long gLastRxData7;
+}
+
+export long LinBridge_Reset()
+{
+  gLastRxId = -1;
+  gLastRxDlc = 0;
+  gLastRxData0 = 0;
+  gLastRxData1 = 0;
+  gLastRxData2 = 0;
+  gLastRxData3 = 0;
+  gLastRxData4 = 0;
+  gLastRxData5 = 0;
+  gLastRxData6 = 0;
+  gLastRxData7 = 0;
+  return 0;
+}
+
+export long LinBridge_SendFrame(
+  long frameId,
+  long dlc,
+  long b0,
+  long b1,
+  long b2,
+  long b3,
+  long b4,
+  long b5,
+  long b6,
+  long b7)
+{
+  if (dlc < 0 || dlc > 8)
+  {
+    return 1;
+  }
+
+  gTxFrame.MsgChannel = LIN_CHANNEL;
+  gTxFrame.ID = frameId;
+
+  gTxFrame.byte(0) = b0;
+  gTxFrame.byte(1) = b1;
+  gTxFrame.byte(2) = b2;
+  gTxFrame.byte(3) = b3;
+  gTxFrame.byte(4) = b4;
+  gTxFrame.byte(5) = b5;
+  gTxFrame.byte(6) = b6;
+  gTxFrame.byte(7) = b7;
+
+  /*
+   * LIN master publish pattern:
+   *   RTR = 0 prepares/schedules the response data.
+   *   RTR = 1 transmits the header.
+   *
+   * Depending on your LDF/schedule table, you may want to replace this with
+   * named linFrame objects or schedule-table control.
+   */
+  gTxFrame.RTR = 0;
+  output(gTxFrame);
+  gTxFrame.RTR = 1;
+  output(gTxFrame);
+
+  return 0;
+}
+
+export long LinBridge_RequestSlaveResponse(long frameId)
+{
+  gRxHeader.MsgChannel = LIN_CHANNEL;
+  gRxHeader.ID = frameId;
+  gRxHeader.RTR = 1;
+  output(gRxHeader);
+  return 0;
+}
+
+export long LinBridge_WaitForFrame(long frameId, long timeoutMs)
+{
+  long ret;
+
+  /*
+   * In many CANoe LIN setups this can be implemented with TestWaitForMessage()
+   * and TestGetWaitEventMsgData(). If your CANoe version or node context does
+   * not allow that with generic linmessage objects, implement the wait in an
+   * on linFrame handler and use an internal CAPL queue.
+   */
+  ret = TestWaitForMessage(frameId, timeoutMs);
+  if (ret == 0)
+  {
+    return 0;
+  }
+
+  /*
+   * TODO: Fill gLastRx* from the received LIN frame.
+   *
+   * Project-specific alternatives:
+   * - Use a named LDF frame object and TestGetWaitEventMsgData(namedFrame).
+   * - Use `on linFrame <FrameName>` handlers and keep the most recent matching
+   *   frame in CAPL globals.
+   * - Use a CAPL ring buffer if several RX frames must be retained.
+   */
+  gLastRxId = frameId;
+  return 1;
+}
+
+export long LinBridge_GetLastRxId()
+{
+  return gLastRxId;
+}
+
+export long LinBridge_GetLastRxDlc()
+{
+  return gLastRxDlc;
+}
+
+export long LinBridge_GetLastRxByte(long index)
+{
+  if (index == 0) return gLastRxData0;
+  if (index == 1) return gLastRxData1;
+  if (index == 2) return gLastRxData2;
+  if (index == 3) return gLastRxData3;
+  if (index == 4) return gLastRxData4;
+  if (index == 5) return gLastRxData5;
+  if (index == 6) return gLastRxData6;
+  if (index == 7) return gLastRxData7;
+  return 0;
+}
+

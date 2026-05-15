@@ -1,0 +1,12 @@
+[project]
+name = "vector-vn16xx-lin-demo"
+version = "0.1.0"
+description = "Minimal Python ctypes demo for controlling LIN through Vector VN16xx XL Driver Library"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+trace32 = ["lauterbach-trace32-rcl~=1.1.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

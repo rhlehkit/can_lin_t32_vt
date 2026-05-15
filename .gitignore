@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / OS
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
+
+# Vector / CANoe generated outputs
+.vector/
+TestReports/
+*.vtestreport
+*.vtestreportxml
+*.vtestunit
+*.vtestunit-basic
+
+# Local backups
+backups/
+
+# Transfer packages
+handoff/
